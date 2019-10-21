@@ -6,14 +6,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bugboard', '0002_auto_20191014_1357'),
-    ]
+    dependencies = [("bugboard", "0002_auto_20191014_1357")]
 
     operations = [
         migrations.AddField(
-            model_name='task',
-            name='priority',
+            model_name="task",
+            name="priority",
             field=models.CharField(max_length=20, null=True),
-        ),
+        )
     ]

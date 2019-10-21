@@ -6,14 +6,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bugboard', '0005_task_status'),
-    ]
+    dependencies = [("bugboard", "0005_task_status")]
 
     operations = [
         migrations.AlterField(
-            model_name='task',
-            name='admin_link',
-            field=models.URLField(default='#', max_length=70),
-        ),
+            model_name="task",
+            name="admin_link",
+            field=models.URLField(default="#", max_length=70),
+        )
     ]

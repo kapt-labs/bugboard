@@ -6,14 +6,14 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bugboard', '0010_auto_20191016_1402'),
-    ]
+    dependencies = [("bugboard", "0010_auto_20191016_1402")]
 
     operations = [
         migrations.AlterField(
-            model_name='member',
-            name='avatar_url',
-            field=models.URLField(default='https://i.imgur.com/1c85UxD.png', max_length=255),
-        ),
+            model_name="member",
+            name="avatar_url",
+            field=models.URLField(
+                default="https://i.imgur.com/1c85UxD.png", max_length=255
+            ),
+        )
     ]

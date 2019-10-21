@@ -8,10 +8,13 @@ class Member(models.Model):
     Arguments:
         models {django.db.models.Model} -- Default django model.
     """
+
     id_member = models.IntegerField(primary_key=True)
     email = models.EmailField(max_length=254, null=True)
     display_name = models.CharField(max_length=255)
-    avatar_url = models.URLField(max_length=255, default="https://i.imgur.com/1c85UxD.png")
+    avatar_url = models.URLField(
+        max_length=255, default="https://i.imgur.com/1c85UxD.png"
+    )
     member = models.BooleanField()
 
     def __str__(self):
@@ -24,6 +27,7 @@ class Project(models.Model):
     Arguments:
         models {django.db.models.Model} -- Default django model.
     """
+
     id_project = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
     devurl = models.URLField(max_length=255, null=True)
@@ -37,6 +41,7 @@ class Task(models.Model):
     Arguments:
         models {django.db.models.Model} -- Default django model.
     """
+
     id_task = models.IntegerField(primary_key=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_at = models.DateTimeField()
@@ -53,9 +58,9 @@ class Task(models.Model):
     requester_email = models.EmailField(max_length=254, null=True)
     due_at = models.DateTimeField(null=True)
     admin_link = models.URLField(max_length=70, default="#")
-    assignee = models.ManyToManyField('Member')
-    tag = models.ManyToManyField('Tag')
-    comment = models.ManyToManyField('Comment')
+    assignee = models.ManyToManyField("Member")
+    tag = models.ManyToManyField("Tag")
+    comment = models.ManyToManyField("Comment")
 
 
 class Tag(models.Model):
@@ -64,6 +69,7 @@ class Tag(models.Model):
     Arguments:
         models {django.db.models.Model} -- Default django model.
     """
+
     name = models.CharField(max_length=255)
 
 
@@ -73,6 +79,7 @@ class Comment(models.Model):
     Arguments:
         models {django.db.models.Model} -- Default django model.
     """
+
     id_comment = models.IntegerField(primary_key=True)
     created_at = models.DateTimeField()
     text = models.TextField(null=True)

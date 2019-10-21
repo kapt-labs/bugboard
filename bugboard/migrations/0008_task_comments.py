@@ -6,14 +6,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bugboard', '0007_comment'),
-    ]
+    dependencies = [("bugboard", "0007_comment")]
 
     operations = [
         migrations.AddField(
-            model_name='task',
-            name='comments',
-            field=models.ManyToManyField(to='bugboard.Comment'),
-        ),
+            model_name="task",
+            name="comments",
+            field=models.ManyToManyField(to="bugboard.Comment"),
+        )
     ]

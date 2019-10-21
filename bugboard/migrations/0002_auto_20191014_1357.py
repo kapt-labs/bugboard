@@ -6,26 +6,19 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bugboard', '0001_initial'),
-    ]
+    dependencies = [("bugboard", "0001_initial")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='tag',
-            name='task',
+        migrations.RemoveField(model_name="tag", name="task"),
+        migrations.AddField(
+            model_name="task",
+            name="assignee",
+            field=models.ManyToManyField(to="bugboard.Member"),
         ),
         migrations.AddField(
-            model_name='task',
-            name='assignee',
-            field=models.ManyToManyField(to='bugboard.Member'),
+            model_name="task",
+            name="tag",
+            field=models.ManyToManyField(to="bugboard.Tag"),
         ),
-        migrations.AddField(
-            model_name='task',
-            name='tag',
-            field=models.ManyToManyField(to='bugboard.Tag'),
-        ),
-        migrations.DeleteModel(
-            name='Assignee',
-        ),
+        migrations.DeleteModel(name="Assignee"),
     ]

@@ -6,14 +6,10 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bugboard', '0008_task_comments'),
-    ]
+    dependencies = [("bugboard", "0008_task_comments")]
 
     operations = [
         migrations.RenameField(
-            model_name='task',
-            old_name='comments',
-            new_name='comment',
-        ),
+            model_name="task", old_name="comments", new_name="comment"
+        )
     ]
