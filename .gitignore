@@ -105,3 +105,9 @@ venv.bak/
 
 # vscode
 .vscode/
+
+# pre-commit
+.pre-commit-config.yaml
+
+# flake8
+.flake8

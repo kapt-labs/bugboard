@@ -1,7 +1,7 @@
-from django.views import generic
+# Third party
+from bugboard.models import Project, Task
 from django.db.models import Max
-from bugboard.models import Task
-from bugboard.models import Project
+from django.views import generic
 
 
 class UnnassignedView(generic.ListView):

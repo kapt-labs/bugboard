@@ -1,14 +1,13 @@
+# Standard Library
+import datetime
 import os
 import time
+
+# Third party
+from bugboard.models import Comment, Member, Project, Tag, Task
+from django.core.management.base import BaseCommand
 import pytz
 import requests
-import datetime
-from bugboard.models import Tag
-from bugboard.models import Task
-from bugboard.models import Member
-from bugboard.models import Project
-from bugboard.models import Comment
-from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
