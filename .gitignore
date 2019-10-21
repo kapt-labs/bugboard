@@ -1,0 +1,7 @@
+*.pyc
+*~
+__pycache__
+myvenv
+/static
+.vscode/
+backlog.txt

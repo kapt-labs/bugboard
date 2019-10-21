@@ -1,0 +1,141 @@
+{%extends "bugboard/base.html" %}
+
+
+{% block infos %}
+    {{ task_list|length }}
+{% endblock %}
+
+{% block open_tasks %}
+    {{ total_tasks }}
+{% endblock %}
+
+{% block projects %}
+    {{ total_projects }}
+{% endblock %}
+
+{% block scroll_infos %}
+    {{ task_list|length }}
+{% endblock %}
+
+
+
+
+{% block content %}
+
+    <div id="mainpanel" class="container-fluid">
+        <div class="row mx-n1">
+
+    {% for task in task_list %}
+
+        <div class="col-md-6 col-xl-4 px-1 mb-3">
+            <div class="card card-body">
+                <h4 class="card-title"><a href="{{ task.admin_link }}">
+                    🔗 {{ task.project.name }}
+                </a></h4>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="{{ task.created_at|date:"d/m/Y, H:i:s" }}">
+                        {{ task.created_at|timesince }}
+                    </span>
+                </h6>
+                <blockquote class="blockquote">
+                    <p class="mb-0 card-text">
+                        {{ task.description }}
+                    </p>
+                    <footer class="blockquote-footer">
+                        {{ task.requester_email }}
+                    </footer>
+                </blockquote>
+                {% if task.comment.all.count > 0 %}
+                    <hr />
+                    <div>
+                        {% for comment in task.comment.all|dictsortreversed:"id_comment" %}
+                            {% if forloop.first %}
+                                <div class="comment">
+                                    <p>
+                                        {{ comment.text }}
+                                    </p>
+                                    <p class="blockquote-footer">
+                                        <img src="{{ comment.member.avatar_url }}" class="avatar" />
+                                        {{ comment.member.display_name }}
+                                        <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="{{ comment.created_at|date:"d/m/Y, H:i:s" }}">
+                                            {{ comment.created_at|timesince }}
+                                        </span>
+                                    </p>
+                                </div>
+                                {% if task.comment.all.count > 1 %}
+                                <details>
+                                    <summary>
+                                        View previous comments
+                                    </summary>
+                                {% endif %}
+                            {% else %}
+                                <div class="small comment">
+                                    <p>
+                                        {{ comment.text }}
+                                    </p>
+                                    <p class="blockquote-footer">
+                                        <img src="{{ comment.member.avatar_url }}" class="avatar" />
+                                        {{ comment.member.display_name }}
+                                        <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="{{ comment.created_at|date:"d/m/Y, H:i:s" }}">
+                                            {{ comment.created_at|timesince }}
+                                        </span>
+                                    </p>
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                        </details>
+                    </div>
+                {% endif %}
+                <hr />
+                <p class="card-text">
+                    {% for assignee in task.assignee.all %}
+                        <span class="badge badge-light font-size-lg">
+                            <img src="{{ assignee.avatar_url }}" class="avatar" /> {{ assignee.email.0 }}{{ assignee.email.1 }}
+                        </span>
+                    {% endfor %}
+                    <!-- get_priority_display -->
+                    <span class="badge
+                    {% if task.priority_id == 0 %}
+                        badge-info
+                    {% elif task.priority_id == 1 or task.priority_id == 2 %}
+                        badge-danger
+                    {% else %}
+                        badge-light
+                    {% endif %}
+                    font-size-lg">
+                        {{ task.priority|title }}
+                    </span>
+                    <span class="badge
+                    {% if task.status_id == None %}
+                        badge-warning
+                    {% elif task.status_id == 4 %}
+                        badge-success
+                    {% else %}
+                        badge-light
+                    {% endif %}
+                    font-size-lg">
+                        {% if task.status_id == 0 %}
+                            Backlog
+                        {% elif task.status_id == 1 %}
+                            Todo
+                        {% elif task.status_id == 2 %}
+                            Doing
+                        {% elif task.status_id == 4 %}
+                            Done
+                        {% elif task.status_id == 5 %}
+                            Closed
+                        {% elif task.status_id == None %}
+                            Feedback
+                        {% else %}
+                            Unknown status: {{ task.status_id }}
+                        {% endif %}
+                    </span>
+                </p>
+            </div>
+        </div>
+
+    {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

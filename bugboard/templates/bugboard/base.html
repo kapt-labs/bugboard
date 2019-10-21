@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to the bugboard</title>
+    <link rel="icon" type="image/png" href="{% static 'bugboard/favicon.png' %}" />
+    <link href="{% static 'bugboard/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bugboard/open-iconic-bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bugboard/design.css' %}" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <a class="navbar-brand" href="/bugboard/">the bugboard</a>
+                        is displaying <b>{% block infos %}{% endblock %}</b> tasks
+                    <div class="alert alert-warning float-right" role="alert">
+                        <b>{% block open_tasks %}{% endblock %}</b> open tasks in <b>{% block projects %}{% endblock %}</b> projects
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="hackish-way-of-detecting-sticky-in-js"></div>
+
+    <div class="container-fluid">
+        <nav id="menu" class="m-3">
+            <div class="btn-group" role="group">
+                <a href="/unnassigned/" data-link="/unnassigned/" class="btn btn-outline-secondary">Unnassigned</a>
+                <a href="/commented/" data-link="/commented/" class="btn btn-outline-secondary">Last commented</a>
+                <a href="/created/" data-link="/created/" class="btn btn-outline-secondary">Last created</a>
+                <a href="/kapt/?id=se" data-idname="se" class="btn btn-outline-secondary">
+                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/34e95ngxx1w5akfxmnzlpw%252Favatar.jpg/64x64.jpg" alt="se" />
+                </a>
+                <a href="/kapt/?id=fp" data-idname="fp" class="btn btn-outline-secondary">
+                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/dz0kgugkbxdxvmk9z3c9ww%252Favatar.png/64x64.jpg" alt="fp" />
+                </a>
+                <a href="/kapt/?id=ad" data-idname="ad" class="btn btn-outline-secondary">
+                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/amxxic9i8pduiakl8caixg%252Favatar.png/64x64.jpg" alt="ad" />
+                </a>
+                <a href="/kapt/?id=bp" data-idname="bp" class="btn btn-outline-secondary">
+                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/abyndkfzotejfdpn9hpzja%252Favatar.png/64x64.jpg" alt="bp" />
+                </a>
+                <a href="/all/" data-link="/all/" class="btn btn-outline-secondary">All</a>
+            </div>
+            <div id="order-group" class="btn-group ml-3" role="group">
+                <a id="order-oldest" data-url="created_at" class="btn btn-outline-secondary">Oldest</a>
+                <a id="order-newest" data-url="-created_at" class="btn btn-outline-secondary">Newest</a>
+            </div>
+            <div id="fixed-infos">
+                <div class="btn btn-primary btn-sm disabled">
+                    <b>{% block scroll_infos %}{% endblock %}</b> tasks
+                </span>
+            </div>
+        </nav>
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'bugboard/jquery.min.js' %}"></script>
+    <script src="{% static 'bugboard/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bugboard/scripts.js' %}"></script>
+</body>
+</html>
