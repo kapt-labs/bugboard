@@ -121,3 +121,19 @@ details:not([open]){
 details[open]{
     max-height: 500em;
 }
+
+h6 span.badge, .blockquote-footer span.badge{
+    cursor: help;
+}
+
+.card-text span{
+    margin: 3px;
+}
+
+.card-text{
+    cursor: default;
+}
+
+.title{
+    border-radius: 5px;
+}

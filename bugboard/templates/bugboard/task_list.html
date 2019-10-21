@@ -36,6 +36,12 @@
                     <span class="badge badge-light" data-toggle="tooltip" data-placement="top" title="{{ task.created_at|date:"d/m/Y, H:i:s" }}">
                         {{ task.created_at|timesince }}
                     </span>
+                    <!-- get_priority_display -->
+                    {% if task.priority_id == 1 or task.priority_id == 2 %}
+                        <span class="badge badge-danger font-size-lg">
+                            {{ task.priority|title }}
+                        </span>
+                    {% endif %}
                 </h6>
                 <blockquote class="blockquote">
                     <p class="mb-0 card-text">
@@ -93,18 +99,6 @@
                             <img src="{{ assignee.avatar_url }}" class="avatar" /> {{ assignee.email.0 }}{{ assignee.email.1 }}
                         </span>
                     {% endfor %}
-                    <!-- get_priority_display -->
-                    <span class="badge
-                    {% if task.priority_id == 0 %}
-                        badge-info
-                    {% elif task.priority_id == 1 or task.priority_id == 2 %}
-                        badge-danger
-                    {% else %}
-                        badge-light
-                    {% endif %}
-                    font-size-lg">
-                        {{ task.priority|title }}
-                    </span>
                     <span class="badge
                     {% if task.status_id == None %}
                         badge-warning

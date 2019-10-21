@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    <a class="navbar-brand" href="/bugboard/">the bugboard</a>
+                    <a class="navbar-brand" href="/bugboard/"><img class="title" src="{% static 'bugboard/title.png' %}" /></a>
                         is displaying <b>{% block infos %}{% endblock %}</b> tasks
                     <div class="alert alert-warning float-right" role="alert">
                         <b>{% block open_tasks %}{% endblock %}</b> open tasks in <b>{% block projects %}{% endblock %}</b> projects

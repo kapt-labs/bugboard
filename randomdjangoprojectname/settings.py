@@ -23,15 +23,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.7.32', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.7.32', '127.0.0.1', '192.168.7.110', '192.168.7.131']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'sslserver',
+    'django_extensions',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.sessions',
@@ -120,13 +121,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
-
-
-# security features (python3.7 managE.py check --deploy) :
+# security features (python3.7 manage.py check --deploy) :
 
 # X_FRAME_OPTIONS = 'DENY'
 # SECURE_HSTS_SECONDS = 60
@@ -137,6 +132,9 @@ STATIC_URL = '/static/'
 # SECURE_BROWSER_XSS_FILTER = True
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+CONN_MAX_AGE = 4  # help with the "all" page (now = 2.7-2.8 seconds to load the page, before = ~2.8s to load the page)
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+STATIC_URL = '/static/'
 # STATIC_ROOT =
-# STATIC_URL =
-CONN_MAX_AGE = 5  # help with the "all" page (now = 2.7-2.8 seconds to load the page, before = ~4s to load the page)

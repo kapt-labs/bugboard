@@ -49,11 +49,11 @@ class CommentedView(generic.ListView):
     queryset = Task.objects.exclude(
         comment=None
     ).annotate(
-        com=Max(
+        last_com=Max(
             'comment__created_at'
         )
     ).order_by(
-        '-com'
+        '-last_com'
     )
 
     def get_context_data(self, **kwargs):
