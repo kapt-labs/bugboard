@@ -17,6 +17,12 @@ Some sensitive data are read using `os.environ('KEY')`, you will need to `export
 
 Just put the application inside your django project, create one url from your project `urls.py` file, make the migrations, migrate the db, and you're done.
 
+----
+
+### Can I have a screenshot ?
+Sure:
+
+![screenshot v0.1](https://i.imgur.com/MUZGVaY.png)
 
 ----
 
