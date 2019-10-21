@@ -9,6 +9,7 @@ the bugboard updates and sort [bugherd](https://www.bugherd.com/)'s tasks and co
 You will need `python` 3 & `django`.
 
 Some sensitive data are read using `os.environ('KEY')`, you will need to `export` them in order to successfully launch the bugboard:
+ * `BUGHERD_API` : The access key used to get content from bugherd.com/api_v2/
  * `SECRET_KEY` : The django secret key.
  * `DB_USER` : PSQL username.
  * `DB_PASS` : PSQL password.

@@ -3,12 +3,12 @@ import time
 import pytz
 import requests
 import datetime
-from django.core.management.base import BaseCommand
 from bugboard.models import Tag
 from bugboard.models import Task
 from bugboard.models import Member
 from bugboard.models import Project
 from bugboard.models import Comment
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -223,10 +223,6 @@ class Command(BaseCommand):
                 task.status = t.get('status', task.status)
                 task.admin_link = t.get('admin_link', task.admin_link)
 
-            # if updated task is closed, then delete it
-            if task.status == 'closed':
-                task.delete()
-
         # or create it if it doesn't exist
         except Task.DoesNotExist:
             task = Task(
@@ -250,7 +246,14 @@ class Command(BaseCommand):
             )
             self.task_tag_list.append([t['id'], t['tag_names']])
             self.task_assignee_list.append([t['id'], t['assignee_ids']])
-        task.save()
+
+        # if updated task is closed, then delete it
+        if task.status == 'closed':
+            task.delete()
+        else:
+            # else save it
+            task.save()
+
         self.display_new_action()
 
     def update_tags(self):
