@@ -44,7 +44,12 @@ class Command(BaseCommand):
             help="Update all tasks (get admin urls, last update infos...).",
         )
         parser.add_argument(
-            "-c", action="store_true", help="Update comments list for each stored task."
+            "-c", action="store_true",
+            help="Update comments list for each stored task."
+        )
+        parser.add_argument(
+            "--all", action="store_true",
+            help="Launch all the updates provided by the other commands one after one."
         )
 
     def handle(self, *args, **options):
@@ -62,7 +67,11 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("Found api key."))
 
-        if options["t"]:
+        if options["all"]:
+            self.update_db()
+            self.update_local_tasks()
+            self.update_local_comments()
+        elif options["t"]:
             self.update_local_tasks()
         elif options["c"]:
             self.update_local_comments()
@@ -70,7 +79,7 @@ class Command(BaseCommand):
             self.update_db()
 
     def update_db(self):
-        """Main function, will call all update-functions one after one.
+        """Main function for creating local db, used later to update task list.
         """
         # collect stats
         users_before = Member.objects.all().count()
