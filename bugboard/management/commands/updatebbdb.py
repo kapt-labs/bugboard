@@ -68,7 +68,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Found api key."))
 
         if options["all"]:
-            self.update_db()
+            self.update_db(False)
             self.update_local_tasks()
             self.update_local_comments()
         elif options["t"]:
@@ -78,7 +78,7 @@ class Command(BaseCommand):
         else:
             self.update_db()
 
-    def update_db(self):
+    def update_db(self, update_tags=True):
         """Main function for creating local db, used later to update task list.
         """
         # collect stats
@@ -91,7 +91,8 @@ class Command(BaseCommand):
         self.update_users()
         self.update_projects()
         self.update_tasks()
-        self.update_tags()
+        if update_tags:
+            self.update_tags()
         self.update_assignees()
 
         # collect stats
@@ -324,11 +325,11 @@ class Command(BaseCommand):
             self.task_tag_list.append([t["id"], t["tag_names"]])
             self.task_assignee_list.append([t["id"], t["assignee_ids"]])
 
-        # if updated task is closed, then delete it
-        if task.status == "closed":
+        # if updated task is closed or belongs to an inactive project, then delete it
+        if task.status == "closed" or task.project.is_active is False:
             task.delete()
+        # else save it
         else:
-            # else save it
             task.save()
 
         self.display_new_action()
