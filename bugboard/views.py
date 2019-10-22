@@ -1,6 +1,6 @@
 # Third party
-from bugboard.models import Project, Task
-from django.db.models import Max
+from bugboard.models import Project, Task, Comment
+from django.db.models import Max, Subquery, OuterRef
 from django.views import generic
 
 
@@ -46,10 +46,16 @@ class CommentedView(generic.ListView):
     template_name = "bugboard/task_list.html"
     paginate_by = 100
 
+    # Thanks https://docs.djangoproject.com/fr/2.2/ref/models/expressions/#subquery-expressions
+    newest = Comment.objects.filter(task=OuterRef('pk')).order_by('-created_at')
+
     queryset = (
-        Task.objects.exclude(comment=None)
-        .annotate(last_com=Max("comment__created_at"))
-        .order_by("-last_com")
+        Task.objects
+        .exclude(comment=None)  # exclude tasks with no comments
+        .annotate(last_com=Max("comment__created_at"))  # add last com in queryset
+        .annotate(last_comment_member=Subquery(newest.values('member__member')[:1]))  # add last com mail
+        .exclude(last_comment_member=True)  # exclude when last com contain out url in email (member)
+        .order_by("-last_com")  # order by last com
     )
 
     def get_context_data(self, **kwargs):
