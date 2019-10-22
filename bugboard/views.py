@@ -53,9 +53,9 @@ class CommentedView(generic.ListView):
         Task.objects
         .exclude(comment=None)  # exclude tasks with no comments
         .annotate(last_com=Max("comment__created_at"))  # add last com in queryset
-        .annotate(last_comment_member=Subquery(newest.values('member__member')[:1]))  # add last com mail
-        .exclude(last_comment_member=True)  # exclude when last com contain out url in email (member)
-        .order_by("-last_com")  # order by last com
+        .annotate(last_comment_member=Subquery(newest.values('member__member')[:1]))  # add last com status
+        .exclude(last_comment_member=True)  # exclude comments from kapt members (status var)
+        .order_by("-last_com")  # order by last com first
     )
 
     def get_context_data(self, **kwargs):

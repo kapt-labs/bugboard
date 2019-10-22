@@ -303,7 +303,6 @@ class Command(BaseCommand):
                 local_task_id=t["local_task_id"],
                 priority_id=t["priority_id"],
                 priority=t.get("priority_id", None),
-                assigned_to_id=t["assigned_to_id"],
                 status_id=t["status_id"],
                 status=t.get("status_id", None),
                 description=t["description"],
