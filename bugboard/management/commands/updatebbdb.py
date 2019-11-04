@@ -209,7 +209,7 @@ class Command(BaseCommand):
         """Get project content, create a Project object, and save it in db.
 
         Arguments:
-            project {integer} -- Id of project..
+            project {integer} -- Id of project.
         """
         p = self.get_data(self.api_base + "projects/" + str(project["id"]) + ".json")
         p = p["project"]  # initial json is like {project:{all the stuff}}
@@ -274,21 +274,21 @@ class Command(BaseCommand):
             task = Task.objects.get(id_task=t["id"])
 
             # update values that can be updated only if last update is more recent thant stored data
-            if (
-                pytz.UTC.fromutc(
-                    (
-                        datetime.datetime.strptime(
-                            t["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ"
-                        )
-                    )
-                )
-                > task.updated_at
-            ):
-                task.priority = t.get("priority", task.priority)
-                task.priority_id = t["priority_id"]
-                task.status_id = t["status_id"]
-                task.status = t.get("status", task.status)
-                task.admin_link = t.get("admin_link", task.admin_link)
+            # if (
+            #     pytz.UTC.fromutc(
+            #         (
+            #             datetime.datetime.strptime(
+            #                 t["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            #             )
+            #         )
+            #     )
+            #     > task.updated_at
+            # ):
+            task.priority = t.get("priority", task.priority)
+            task.priority_id = t["priority_id"]
+            task.status_id = t["status_id"]
+            task.status = t.get("status", task.status)
+            task.admin_link = t.get("admin_link", task.admin_link)
 
         # or create it if it doesn't exist
         except Task.DoesNotExist:
@@ -312,7 +312,7 @@ class Command(BaseCommand):
                 ),
                 local_task_id=t["local_task_id"],
                 priority_id=t["priority_id"],
-                priority=t.get("priority_id", None),
+                priority=t.get("priority", t["priority_id"]),
                 status_id=t["status_id"],
                 status=t.get("status_id", None),
                 description=t["description"],
