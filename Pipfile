@@ -1,0 +1,24 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+black = "*"
+pre-commit = "*"
+isort = "*"
+flake8 = "*"
+
+[packages]
+django = "*"
+psycopg2 = "*"
+requests = "*"
+raven = "*"
+python-dotenv = "*"
+wsgi-basic-auth = "*"
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
