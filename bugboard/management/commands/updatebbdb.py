@@ -318,9 +318,11 @@ class Command(BaseCommand):
             self.task_tag_list.append([t["id"], t["tag_names"]])
             self.task_assignee_list.append([t["id"], t["assignee_ids"]])
 
-        # if updated task is closed or belongs to an inactive project, then delete it
+        # if updated task is closed or belongs to an inactive project, then delete it and remove assignee from list
         if task.status == "closed" or task.project.is_active is False:
             task.delete()
+            self.task_assignee_list.pop()
+
         # else save it
         else:
             task.save()
