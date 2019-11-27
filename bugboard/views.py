@@ -6,11 +6,30 @@ from django.views import generic
 
 class UnnassignedView(generic.ListView):
     template_name = "bugboard/task_list.html"
-    queryset = Task.objects.filter(assignee=None).order_by("-created_at")
     paginate_by = 100
 
     def get_ordering(self):
         return self.request.GET.get("order", "-created_at")
+
+    def get_queryset(self):
+        # ordering is called inside this function, so call it here
+        ordering = self.get_ordering()
+        # get correct kapt email from id
+        email = str(self.request.GET.get("id", "ad")) + "@kapt.mobi"
+
+        # Thanks https://docs.djangoproject.com/fr/2.2/ref/models/expressions/#subquery-expressions
+        newest = Comment.objects.filter(task=OuterRef('pk')).order_by('-created_at')
+
+        # return assigned tasks, without "done" tasks without comments or "done" tasks with last comment from a member
+        return (
+            Task.objects
+            .filter(assignee=None)
+            .exclude(status_id=4, comment=None)  # exclude if status is "Done" and task have no comment
+            .annotate(last_com=Subquery(newest.values('member__member')[:1]))  # add last com in queryset
+            .exclude(status_id=4, last_com=True)  # exclude if status is "Done" ans last comment is from a member (and not a guest)
+            .order_by(ordering)
+        )
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
