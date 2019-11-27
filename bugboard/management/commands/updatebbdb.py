@@ -272,23 +272,16 @@ class Command(BaseCommand):
         # update task
         try:
             task = Task.objects.get(id_task=t["id"])
-
-            # update values that can be updated only if last update is more recent thant stored data
-            # if (
-            #     pytz.UTC.fromutc(
-            #         (
-            #             datetime.datetime.strptime(
-            #                 t["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            #             )
-            #         )
-            #     )
-            #     > task.updated_at
-            # ):
             task.priority = t.get("priority", task.priority)
             task.priority_id = t["priority_id"]
             task.status_id = t["status_id"]
             task.status = t.get("status", task.status)
             task.admin_link = t.get("admin_link", task.admin_link)
+
+            # only get id of assignees
+            ids = [x['id'] for x in t.get("assignees", [])]
+            # update assignees list
+            self.task_assignee_list.append([t["id"], ids])
 
         # or create it if it doesn't exist
         except Task.DoesNotExist:
