@@ -424,6 +424,8 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("\n✅ local db updated."))
 
+        self.update_assignees()
+
     def update_local_comments(self):
         """Update comments relevant to locally-stored tasks.
         """
