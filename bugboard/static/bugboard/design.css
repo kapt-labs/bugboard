@@ -7,7 +7,6 @@ html, body{
 #menu{
     top: 0;
     z-index: 1;
-    width: 100%;
     opacity: 0.9;
     position: sticky;
     background-color: white;
