@@ -32,8 +32,18 @@ class ByMemberView(generic.ListView):
         # get correct kapt email from id
         email = str(self.request.GET.get("id", "ad")) + "@kapt.mobi"
 
-        # return custom queryset
-        return Task.objects.filter(assignee__email=email).order_by(ordering)
+        # Thanks https://docs.djangoproject.com/fr/2.2/ref/models/expressions/#subquery-expressions
+        newest = Comment.objects.filter(task=OuterRef('pk')).order_by('-created_at')
+
+        # return assigned tasks, without "done" tasks without comments or "done" tasks with last comment from a member
+        return (
+            Task.objects
+            .filter(assignee__email=email)
+            .exclude(status_id=4, comment=None)  # exclude if status is "Done" and task have no comment
+            .annotate(last_com=Subquery(newest.values('member__member')[:1]))  # add last com in queryset
+            .exclude(status_id=4, last_com=True)  # exclude if status is "Done" ans last comment is from a member (and not a guest)
+            .order_by(ordering)
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
