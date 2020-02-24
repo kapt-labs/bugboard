@@ -8,7 +8,7 @@ the bugboard updates and sort [bugherd](https://www.bugherd.com/)'s tasks and co
 
 ### Prerequisites
 
-You will need `python3.7` & `django`.
+You will need `python3` (3.7, 3.8...) & `django` (2.2).
 
 Some sensitive data are read using `os.environ('KEY')`, you will need to `export` them in order to successfully launch the bugboard:
  * `DJANGO_SETTINGS_MODULE`
@@ -30,7 +30,24 @@ Some sensitive data are read using `os.environ('KEY')`, you will need to `export
 
 ### Install
 
-coming soon 🔧
+ * coming soon 🔧
+
+ * step X: configure the `BUGBOARD_USER_LIST` in `settings.py`. The list is there to sort the assigned tasks by user, and the template file will loop over it to add the links in the menu.
+   ```
+   [
+       {
+           "id": "enter id of member here",
+           "name": "enter name of member here",
+           "avatar": "enter url of member here"
+       },
+       {
+           "id": "enter id of member here",
+           "name": "enter name of member here",
+       },
+   ]
+  ```  
+    *note: if no avatar is set, then the image "default_member.png" will be used*  
+    *note2: you can use the following command to get the IDs & avatar urls of your members: `curl -u YOUR_BUGHERD_API_KEY_HERE:x https://www.bugherd.com/api_v2/users/members.json`*
 
 ----
 

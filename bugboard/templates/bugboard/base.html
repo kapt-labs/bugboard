@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,16 +11,19 @@
     <link href="{% static 'bugboard/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'bugboard/design.css' %}" rel="stylesheet">
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
-                    <a class="navbar-brand" href="/bugboard/"><img class="title" src="{% static 'bugboard/title.png' %}" /></a>
-                        is displaying <b>{% block infos %}{% endblock %}</b> tasks
+                    <a class="navbar-brand" href="/bugboard/"><img class="title"
+                            src="{% static 'bugboard/title.png' %}" /></a>
+                    is displaying <b>{% block infos %}{% endblock %}</b> tasks
                     <div class="alert alert-warning float-right" role="alert">
-                        <b>{% block open_tasks %}{% endblock %}</b> open tasks in <b>{% block projects %}{% endblock %}</b> projects
+                        <b>{% block open_tasks %}{% endblock %}</b> open tasks in
+                        <b>{% block projects %}{% endblock %}</b> projects
                     </div>
                 </div>
             </div>
@@ -34,18 +38,16 @@
                 <a href="/unnassigned/" data-link="/unnassigned/" class="btn btn-outline-secondary">Unnassigned</a>
                 <a href="/commented/" data-link="/commented/" class="btn btn-outline-secondary">Last commented</a>
                 <a href="/created/" data-link="/created/" class="btn btn-outline-secondary">Last created</a>
-                <a href="/kapt/?id=se" data-idname="se" class="btn btn-outline-secondary">
-                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/34e95ngxx1w5akfxmnzlpw%252Favatar.jpg/64x64.jpg" alt="se" />
+
+                {% for user in BUGBOARD_USER_LIST %}
+                <a href="/kapt/?id={{ user.id }}" data-idname="{{ user.name }}" class="btn btn-outline-secondary" data-placement="bottom" data-toggle="tooltip" title="{{ user.name }}">
+                    {% if user.avatar %}
+                        <img class="avatar" src="{{ user.avatar }}" alt="{{ user.name }}" />
+                    {% else %}
+                        <img class="avatar" src="{% static 'bugboard/default_member.png' %}" alt="{{ user.name }}" />
+                    {% endif %}
                 </a>
-                <a href="/kapt/?id=fp" data-idname="fp" class="btn btn-outline-secondary">
-                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/dz0kgugkbxdxvmk9z3c9ww%252Favatar.png/64x64.jpg" alt="fp" />
-                </a>
-                <a href="/kapt/?id=ad" data-idname="ad" class="btn btn-outline-secondary">
-                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/amxxic9i8pduiakl8caixg%252Favatar.png/64x64.jpg" alt="ad" />
-                </a>
-                <a href="/kapt/?id=bp" data-idname="bp" class="btn btn-outline-secondary">
-                    <img class="avatar" src="https://bugherd-attachments.s3.amazonaws.com/abyndkfzotejfdpn9hpzja%252Favatar.png/64x64.jpg" alt="bp" />
-                </a>
+                {% endfor %}
                 <a href="/all/" data-link="/all/" class="btn btn-outline-secondary">All</a>
             </div>
             <div id="order-group" class="btn-group ml-3" role="group">
@@ -55,8 +57,8 @@
             <div id="fixed-infos">
                 <div class="btn btn-primary btn-sm disabled">
                     <b>{% block scroll_infos %}{% endblock %}</b> tasks
-                </span>
-            </div>
+                    </span>
+                </div>
         </nav>
 
         {% block content %}
@@ -69,4 +71,5 @@
     <script src="{% static 'bugboard/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'bugboard/scripts.js' %}"></script>
 </body>
+
 </html>

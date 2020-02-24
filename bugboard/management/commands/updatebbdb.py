@@ -32,7 +32,7 @@ class Command(BaseCommand):
     help = 'UpdateBBDB - Update BugBoard DataBase database with data from Bugherd api. Red dot during update is a "too much request" error.'
     api_base = "https://www.bugherd.com/api_v2/"
     api_key = ""
-    time_sleep = 1.35
+    time_sleep = 1.5
     projects_id_list = []
     task_tag_list = []
     task_assignee_list = []

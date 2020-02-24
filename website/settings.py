@@ -66,6 +66,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "bugboard.context_processors.user_list",
             ]
         },
     }
@@ -116,7 +117,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# security features (python3.7 manage.py check --deploy) :
+# security features (python3.8 manage.py check --deploy) :
 
 # X_FRAME_OPTIONS = 'DENY'
 # SECURE_HSTS_SECONDS = 60
@@ -176,3 +177,15 @@ LOGGING = {
 }
 
 RAVEN_CONFIG = {"dsn": os.environ["SENTRY_DSN"]}
+
+BUGBOARD_USER_LIST = [
+    {
+        "id": "enter id of member here",
+        "name": "enter name of member here",
+        "avatar": "enter url of member here"
+    },
+    {
+        "id": "enter id of member here",
+        "name": "enter name of member here",
+    },
+]
