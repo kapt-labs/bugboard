@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 # Standard Library
-import os
+import os, json
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -178,14 +178,8 @@ LOGGING = {
 
 RAVEN_CONFIG = {"dsn": os.environ["SENTRY_DSN"]}
 
-BUGBOARD_USER_LIST = [
-    {
-        "id": "enter id of member here",
-        "name": "enter name of member here",
-        "avatar": "enter url of member here"
-    },
-    {
-        "id": "enter id of member here",
-        "name": "enter name of member here",
-    },
-]
+
+with open('bugboard_users.json') as json_users:
+    BUGBOARD_USER_LIST = json.load(json_users)
+
+

@@ -8,31 +8,42 @@ the bugboard updates and sort [bugherd](https://www.bugherd.com/)'s tasks and co
 
 ### Prerequisites
 
-You will need `python3` (3.7, 3.8...) & `django` (2.2).
-
-Some sensitive data are read using `os.environ('KEY')`, you will need to `export` them in order to successfully launch the bugboard:
- * `DJANGO_SETTINGS_MODULE`
- * `PYTHONPATH`
- * `BUGHERD_API`
- * `SECRET_KEY`
- * `DB_ENGINE`
- * `DB_NAME`
- * `DB_USER`
- * `DB_PASSWORD`
- * `DB_HOST`
- * `EMAIL_HOST`
- * `EMAIL_HOST_USER`
- * `EMAIL_HOST_PASSWORD`
- * `STATIC_URL`
- * `DOMAIN_NAME`
- * `ADMIN_URL`
- * `SENTRY_DSN`
+This application uses `python3`, `django2` & `postgresql` (*psycopg2*).
 
 ### Install
 
- * coming soon 🔧
+1. Clone this repo.
 
- * step X: configure the `BUGBOARD_USER_LIST` in `settings.py`. The list is there to sort the assigned tasks by user, and the template file will loop over it to add the links in the menu.
+2. Install required packages:
+   ```
+   pipenv install
+   ```
+
+3. Create a psql database for this project.
+
+4. Create a `.env` file with the following content:
+
+   ```
+   export DJANGO_SETTINGS_MODULE=website.settings
+   export BUGHERD_API=put your bugherd secret key here
+   export SECRET_KEY='put your django secret key here'
+
+   # database config
+   export DB_ENGINE=django.db.backends.postgresql_psycopg2
+   export DB_NAME='your db name'
+   export DB_USER='username'
+   export DB_PASSWORD='password'
+   export DB_HOST='your psql endpoint'
+
+   export STATIC_URL='your static url, /static/ for local dev'
+
+   export DOMAIN_NAME='your domain name, 127.0.0.1 for local dev'
+
+   # facultative, used to monitor your instance
+   export SENTRY_DSN=''
+   ```
+
+5. Edit the file `bugboard_users.json`:
    ```
    [
        {
@@ -45,17 +56,17 @@ Some sensitive data are read using `os.environ('KEY')`, you will need to `export
            "name": "enter name of member here",
        },
    ]
-  ```  
-    *note: if no avatar is set, then the image "default_member.png" will be used*  
-    *note2: you can use the following command to get the IDs & avatar urls of your members: `curl -u YOUR_BUGHERD_API_KEY_HERE:x https://www.bugherd.com/api_v2/users/members.json`*
+   ```  
+   * The list is here to sort the assigned tasks by user, and the template file will loop over it to add the links in the menu.
+
+   * if no avatar is set, then the image "default_member.png" will be used
+   * note2: you can use the following command to get the IDs & avatar urls of your members: `curl -u YOUR_BUGHERD_API_KEY_HERE:x https://www.bugherd.com/api_v2/users/members.json`
+
+
 
 ----
 
 ### Can I have a screenshot ?
 Sure:
 
-![screenshot v0.1](https://i.imgur.com/MUZGVaY.png)
-
-----
-
-*This application was tested using django 2.2, python 3.7.3, and PostGreSQL 10.10 (on Xubuntu 18.04).*
+![screenshot](https://i.imgur.com/OWLv9HZ.png)
