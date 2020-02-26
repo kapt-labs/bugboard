@@ -32,7 +32,7 @@ class Command(BaseCommand):
     help = 'UpdateBBDB - Update BugBoard DataBase database with data from Bugherd api. Red dot during update is a "too much request" error.'
     api_base = "https://www.bugherd.com/api_v2/"
     api_key = ""
-    time_sleep = 1.5
+    time_sleep = 1.25
     projects_id_list = []
     task_tag_list = []
     task_assignee_list = []
@@ -44,12 +44,12 @@ class Command(BaseCommand):
             help="Update all tasks (get admin urls, last update infos...).",
         )
         parser.add_argument(
-            "-c", action="store_true",
-            help="Update comments list for each stored task."
+            "-c", action="store_true", help="Update comments list for each stored task."
         )
         parser.add_argument(
-            "--all", action="store_true",
-            help="Launch all the updates provided by the other commands one after one."
+            "--all",
+            action="store_true",
+            help="Launch all the updates provided by the other commands one after one.",
         )
 
     def handle(self, *args, **options):
@@ -279,7 +279,7 @@ class Command(BaseCommand):
             task.admin_link = t.get("admin_link", task.admin_link)
 
             # only get id of assignees
-            ids = [x['id'] for x in t.get("assignees", [])]
+            ids = [x["id"] for x in t.get("assignees", [])]
             # update assignees list
             self.task_assignee_list.append([t["id"], ids])
 
@@ -362,10 +362,24 @@ class Command(BaseCommand):
 
             assignee_list = self.task_assignee_list.pop()
 
-            for member in assignee_list[1]:
-                Task.objects.get(id_task=assignee_list[0]).assignee.add(
-                    Member.objects.get(id_member=member)
-                )
+            current_assignees = Task.objects.get(
+                id_task=assignee_list[0]
+            ).assignee.all()
+
+            # get current assignees, and remove assignees that are not in updated list
+            for assignee in current_assignees:
+                if not assignee in assignee_list[1]:
+                    Task.objects.get(id_task=assignee_list[0]).assignee.remove(
+                        assignee.id_member
+                    )
+
+            # add new assignees that were not in current assignee list
+            for id_member in assignee_list[1]:
+
+                # get member from id
+                member = Member.objects.get(id_member=id_member)
+
+                Task.objects.get(id_task=assignee_list[0]).assignee.add(member)
                 self.display_new_action()
 
         self.stdout.write(
