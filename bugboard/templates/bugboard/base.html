@@ -40,7 +40,7 @@
                 <a href="/created/" data-link="/created/" class="btn btn-outline-secondary">Last created</a>
 
                 {% for user in BUGBOARD_USER_LIST %}
-                <a href="/kapt/?id={{ user.id }}" data-idname="{{ user.name }}" class="btn btn-outline-secondary" data-placement="bottom" data-toggle="tooltip" title="{{ user.name }}">
+                <a href="/user/?id={{ user.id }}" data-idname="{{ user.id }}" class="btn btn-outline-secondary" data-placement="bottom" data-toggle="tooltip" title="{{ user.name }}">
                     {% if user.avatar %}
                         <img class="avatar" src="{{ user.avatar }}" alt="{{ user.name }}" />
                     {% else %}

@@ -16,18 +16,22 @@ class UnnassignedView(generic.ListView):
         ordering = self.get_ordering()
 
         # Thanks https://docs.djangoproject.com/fr/2.2/ref/models/expressions/#subquery-expressions
-        newest = Comment.objects.filter(task=OuterRef('pk')).order_by('-created_at')
+        newest = Comment.objects.filter(task=OuterRef("pk")).order_by("-created_at")
 
         # return assigned tasks, without "done" tasks without comments or "done" tasks with last comment from a member
         return (
-            Task.objects
-            .filter(assignee=None)
-            .exclude(status_id=4, comment=None)  # exclude if status is "Done" and task have no comment
-            .annotate(last_com=Subquery(newest.values('member__member')[:1]))  # add last com in queryset
-            .exclude(status_id=4, last_com=True)  # exclude if status is "Done" ans last comment is from a member (and not a guest)
+            Task.objects.filter(assignee=None)
+            .exclude(
+                status_id=4, comment=None
+            )  # exclude if status is "Done" and task have no comment
+            .annotate(
+                last_com=Subquery(newest.values("member__member")[:1])
+            )  # add last com in queryset
+            .exclude(
+                status_id=4, last_com=True
+            )  # exclude if status is "Done" ans last comment is from a member (and not a guest)
             .order_by(ordering)
         )
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,15 +52,20 @@ class ByMemberView(generic.ListView):
         ordering = self.get_ordering()
 
         # Thanks https://docs.djangoproject.com/fr/2.2/ref/models/expressions/#subquery-expressions
-        newest = Comment.objects.filter(task=OuterRef('pk')).order_by('-created_at')
+        newest = Comment.objects.filter(task=OuterRef("pk")).order_by("-created_at")
 
         # return assigned tasks, without "done" tasks without comments or "done" tasks with last comment from a member
         return (
-            Task.objects
-            .filter(assignee__id_member=self.request.GET.get("id", None))
-            .exclude(status_id=4, comment=None)  # exclude if status is "Done" and task have no comment
-            .annotate(last_com=Subquery(newest.values('member__member')[:1]))  # add last com in queryset
-            .exclude(status_id=4, last_com=True)  # exclude if status is "Done" ans last comment is from a member (and not a guest)
+            Task.objects.filter(assignee__id_member=self.request.GET.get("id", None))
+            .exclude(
+                status_id=4, comment=None
+            )  # exclude if status is "Done" and task have no comment
+            .annotate(
+                last_com=Subquery(newest.values("member__member")[:1])
+            )  # add last com in queryset
+            .exclude(
+                status_id=4, last_com=True
+            )  # exclude if status is "Done" ans last comment is from a member (and not a guest)
             .order_by(ordering)
         )
 
@@ -72,14 +81,17 @@ class CommentedView(generic.ListView):
     paginate_by = 100
 
     # Thanks https://docs.djangoproject.com/fr/2.2/ref/models/expressions/#subquery-expressions
-    newest = Comment.objects.filter(task=OuterRef('pk')).order_by('-created_at')
+    newest = Comment.objects.filter(task=OuterRef("pk")).order_by("-created_at")
 
     queryset = (
-        Task.objects
-        .exclude(comment=None)  # exclude tasks with no comments
+        Task.objects.exclude(comment=None)  # exclude tasks with no comments
         .annotate(last_com=Max("comment__created_at"))  # add last com in queryset
-        .annotate(last_comment_member=Subquery(newest.values('member__member')[:1]))  # add last com status
-        .exclude(last_comment_member=True)  # exclude comments from kapt members (status var)
+        .annotate(
+            last_comment_member=Subquery(newest.values("member__member")[:1])
+        )  # add last com status
+        .exclude(
+            last_comment_member=True
+        )  # exclude comments from team members (status var)
         .order_by("-last_com")  # order by last com first
     )
 
