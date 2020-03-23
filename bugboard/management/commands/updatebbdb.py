@@ -93,7 +93,6 @@ class Command(BaseCommand):
         self.update_tasks()
         if update_tags:
             self.update_tags()
-        # self.update_assignees()
 
         # collect stats
         added_users = Member.objects.all().count() - users_before
