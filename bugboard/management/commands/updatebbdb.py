@@ -388,8 +388,8 @@ class Command(BaseCommand):
                     member = Member.objects.get(id_member=id_member)
                 except Member.DoesNotExist:
                     member = Member(
-                        id_member=c["user_id"],
-                        display_name="Anonymous#" + str(c["user_id"]),
+                        id_member=id_member,
+                        display_name="Anonymous#" + str(id_member),
                         member=True,
                     )
                     member.save()
