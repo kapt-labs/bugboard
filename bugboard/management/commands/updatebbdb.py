@@ -32,7 +32,7 @@ class Command(BaseCommand):
     help = 'UpdateBBDB - Update BugBoard DataBase database with data from Bugherd api. Red dot during update is a "too much request" error.'
     api_base = "https://www.bugherd.com/api_v2/"
     api_key = ""
-    time_sleep = 1.25
+    time_sleep = float(os.getenv("BUGBOARD_SLEEP", 1.5))
     projects_id_list = []
     task_tag_list = []
     task_assignee_list = []
@@ -141,6 +141,8 @@ class Command(BaseCommand):
         # thx http://sametmax.com/alternative-au-do-while-en-python/ for the concept
         while "There is more content to download.":
             data = self.get_data(self.api_base + "users/members.json?page=" + str(page))
+            if data == "not found":
+                return
 
             for u in data["users"]:
                 self.update_user(u)
@@ -194,6 +196,8 @@ class Command(BaseCommand):
             data = self.get_data(
                 self.api_base + "projects/active.json?page=" + str(page)
             )
+            if data == "not found":
+                return
 
             for p in data["projects"]:
                 self.update_project_details(p)
@@ -212,6 +216,8 @@ class Command(BaseCommand):
             project {integer} -- Id of project.
         """
         p = self.get_data(self.api_base + "projects/" + str(project["id"]) + ".json")
+        if p == "not found":
+            return
         p = p["project"]  # initial json is like {project:{all the stuff}}
 
         project = Project(
@@ -246,6 +252,8 @@ class Command(BaseCommand):
                     + "/tasks.json?page="
                     + str(page)
                 )
+                if data == "not found":
+                    return
 
                 for t in data["tasks"]:
                     if t["status_id"] != 5:
@@ -318,7 +326,7 @@ class Command(BaseCommand):
             self.task_tag_list.append([t["id"], t["tag_names"]])
             self.task_assignee_list.append([t["id"], t["assignee_ids"]])
 
-        # if updated task is closed or belongs to an inactive project, then delete it and remove assignee from list
+        # if updated task is closed or belong to an inactive project, then delete it and remove assignee from list
         if task.status == "closed" or task.project.is_active is False:
             task.delete()
             self.task_assignee_list.pop()
@@ -435,8 +443,10 @@ class Command(BaseCommand):
                 + str(task.id_task)
                 + ".json"
             )
-
-            self.update_task_details(task.project.id_project, updated_task["task"])
+            if updated_task == "not found":
+                task.delete()
+            else:
+                self.update_task_details(task.project.id_project, updated_task["task"])
 
         self.stdout.write(self.style.SUCCESS("\n✅ local db updated."))
 
@@ -459,8 +469,8 @@ class Command(BaseCommand):
                 + str(task.id_task)
                 + "/comments.json"
             )
-
-            self.update_comments_details(task, comments["comments"])
+            if comments != "not found":
+                self.update_comments_details(task, comments["comments"])
 
         self.stdout.write(self.style.SUCCESS("\n✅ local db updated."))
 
@@ -474,16 +484,21 @@ class Command(BaseCommand):
         Returns:
             dict -- Dictionnary of the data returned by the website.
         """
+        local_sleep = self.time_sleep
         # try not to get 'Rate Limit Exceeded' error
-        time.sleep(self.time_sleep)
+        time.sleep(local_sleep)
 
         # get data from url
         data = requests.get(link, auth=(self.api_key, "x")).json()
 
         # if rate limit is exceeded, wait and retry
         while "error" in data:
+            # if task have been deleted
+            if(data['error'] == "not found"):
+                return "not found"
             print(self.style.ERROR("."), end="", flush="True")
-            time.sleep(self.time_sleep * 2)
+            local_sleep += 1
+            time.sleep(local_sleep)
             data = requests.get(link, auth=(self.api_key, "x")).json()
 
         return data
