@@ -384,7 +384,15 @@ class Command(BaseCommand):
             for id_member in assignee_list[1]:
 
                 # get member from id
-                member = Member.objects.get(id_member=id_member)
+                try:
+                    member = Member.objects.get(id_member=id_member)
+                except Member.DoesNotExist:
+                    member = Member(
+                        id_member=c["user_id"],
+                        display_name="Anonymous#" + str(c["user_id"]),
+                        member=True,
+                    )
+                    member.save()
 
                 Task.objects.get(id_task=assignee_list[0]).assignee.add(member)
                 self.display_new_action()
