@@ -100,28 +100,18 @@
                         </span>
                     {% endfor %}
                     <span class="badge
-                    {% if task.status_id == None %}
+                    {% if task.status == "feedback" %}
                         badge-warning
-                    {% elif task.status_id == 4 %}
+                    {% elif task.status == "done" %}
                         badge-success
                     {% else %}
                         badge-light
                     {% endif %}
                     font-size-lg">
-                        {% if task.status_id == 0 %}
-                            Backlog
-                        {% elif task.status_id == 1 %}
-                            Todo
-                        {% elif task.status_id == 2 %}
-                            Doing
-                        {% elif task.status_id == 4 %}
-                            Done
-                        {% elif task.status_id == 5 %}
-                            Closed
-                        {% elif task.status_id == None %}
-                            Feedback
+                        {% if task.status %}
+                            {{ task.status|title }}
                         {% else %}
-                            Unknown status: {{ task.status_id }}
+                            Unknown status
                         {% endif %}
                     </span>
                 </p>

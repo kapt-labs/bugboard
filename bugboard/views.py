@@ -22,13 +22,13 @@ class UnnassignedView(generic.ListView):
         return (
             Task.objects.filter(assignee=None)
             .exclude(
-                status_id=4, comment=None
+                status="done", comment=None
             )  # exclude if status is "Done" and task have no comment
             .annotate(
                 last_com=Subquery(newest.values("member__member")[:1])
             )  # add last com in queryset
             .exclude(
-                status_id=4, last_com=True
+                status="done", last_com=True
             )  # exclude if status is "Done" ans last comment is from a member (and not a guest)
             .order_by(ordering)
         )
@@ -58,13 +58,13 @@ class ByMemberView(generic.ListView):
         return (
             Task.objects.filter(assignee__id_member=self.request.GET.get("id", None))
             .exclude(
-                status_id=4, comment=None
+                status="done", comment=None
             )  # exclude if status is "Done" and task have no comment
             .annotate(
                 last_com=Subquery(newest.values("member__member")[:1])
             )  # add last com in queryset
             .exclude(
-                status_id=4, last_com=True
+                status="done", last_com=True
             )  # exclude if status is "Done" ans last comment is from a member (and not a guest)
             .order_by(ordering)
         )

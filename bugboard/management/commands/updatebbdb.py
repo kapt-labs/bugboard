@@ -313,8 +313,7 @@ class Command(BaseCommand):
                 local_task_id=t["local_task_id"],
                 priority_id=t["priority_id"],
                 priority=t.get("priority", t["priority_id"]),
-                status_id=t["status_id"],
-                status=t.get("status_id", None),
+                status=t.get("status", None),
                 description=t["description"],
                 external_id=t["external_id"],
                 requester_id=t["requester_id"],
@@ -374,11 +373,11 @@ class Command(BaseCommand):
             ).assignee.all()
 
             # get current assignees, and remove assignees that are not in updated list
-            for assignee in current_assignees:
-                if not assignee in assignee_list[1]:
-                    Task.objects.get(id_task=assignee_list[0]).assignee.remove(
-                        assignee.id_member
-                    )
+            # for assignee in current_assignees:
+            #     if not assignee in assignee_list[1]:
+            #         Task.objects.get(id_task=assignee_list[0]).assignee.remove(
+            #             assignee.id_member
+            #         )
 
             # add new assignees that were not in current assignee list
             for id_member in assignee_list[1]:
@@ -501,7 +500,7 @@ class Command(BaseCommand):
         # if rate limit is exceeded, wait and retry
         while "error" in data:
             # if task have been deleted
-            if(data['error'] == "not found"):
+            if data["error"] == "not found":
                 return "not found"
             print(self.style.ERROR("."), end="", flush="True")
             local_sleep += 1

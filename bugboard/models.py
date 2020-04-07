@@ -50,7 +50,6 @@ class Task(models.Model):
     priority_id = models.IntegerField(null=True)
     priority = models.CharField(max_length=20, null=True)
     status = models.CharField(max_length=20, null=True)
-    status_id = models.IntegerField(null=True)
     description = models.TextField(null=True)
     external_id = models.IntegerField(null=True)
     requester_id = models.IntegerField(null=True)
